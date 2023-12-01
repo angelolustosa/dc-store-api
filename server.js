@@ -8,7 +8,7 @@ app.use(express.json())
 
 //app.use(express.urlencoded())
 
-db.connection.sync({ force: true })
+db.connection.sync(/* { force: true } */)
 .then(() => {
     console.log('Drop and re-sync db.');
 })
