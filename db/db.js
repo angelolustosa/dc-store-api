@@ -1,25 +1,26 @@
 import { Sequelize } from "sequelize";
 import { DB_CONFIG } from "./config/config.js";
 
-export const connection = new Sequelize(
-  DB_CONFIG.db,
-  DB_CONFIG.user,
-  DB_CONFIG.pass,
+// postgres://admin:Zayvmmoma5yhpPThZHkRhnOEmWj3FqOd@dpg-clj9jrtae00c7384q3ag-a.oregon-postgres.render.com/dc_pne2
+const URL_RENDER = `${DB_CONFIG.DIALECT}://${DB_CONFIG.USER}:${DB_CONFIG.PASS}@${DB_CONFIG.HOST}/${DB_CONFIG.DB}`
+console.log(`[URL_RENDER]: ${URL_RENDER}`);
+
+export const connection = new Sequelize(URL_RENDER,
   {
-    host: DB_CONFIG.host,
-    dialect: DB_CONFIG.dialect,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false, // Configuração para evitar o erro "SSL/TLS required"
-      },
-    },
     pool: {
       max: 5, // maximo de conexoes suportados 
       min: 0, // minimo de conexoes suportados
       acquire: 30000, // tempo maximo, em ms(milisegundos) que o pool tenta conectar antes de gerar o erro
       idle: 10000, // tempo maximo, em ms(milisegundos) que o pool pode ser confirmado antes de ser estabelecido
-    }
+    },
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false, // Configuração para evitar o erro "SSL/TLS required"
+      },
+      keepAlive: true
+    },
+    ssl: true,
   });
 
 try {
